@@ -18,6 +18,7 @@ class ActivityController extends Controller
             ->firstOrFail();
 
         return Activity::query()
+            ->with('subject')
             ->fromSub(function (Builder $query) use ($user) {
                 $query
                     ->where('user_id', '=', $user->id)
