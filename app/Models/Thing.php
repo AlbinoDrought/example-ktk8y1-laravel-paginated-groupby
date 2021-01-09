@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Class Thing
+ * @package App\Models
+ * @property int $id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
+class Thing extends Model
+{
+    use HasFactory;
+
+    public function activities()
+    {
+        return $this->morphToMany(
+            Activity::class,
+            'subject'
+        );
+    }
+}
