@@ -25,9 +25,26 @@ class DatabaseSeeder extends Seeder
             $user = User::factory()->create();
         }
 
-        Activity::factory()->count(100)->create([
+        // create some activities for today:
+        Activity::factory()->count(10)->create([
+            'created_at' => now()->startOfDay(),
             'user_id' => $user->id,
         ]);
+        Activity::factory()->count(10)->create([
+            'created_at' => now()->endOfDay(),
+            'user_id' => $user->id,
+        ]);
+
+        // and some for yesterday:
+        Activity::factory()->count(10)->create([
+            'created_at' => now()->subDay()->startOfDay(),
+            'user_id' => $user->id,
+        ]);
+        Activity::factory()->count(10)->create([
+            'created_at' => now()->subDay()->endOfDay(),
+            'user_id' => $user->id,
+        ]);
+
         // and 100 activity records for 100 random users:
         Activity::factory()->count(100)->create();
     }
