@@ -8,6 +8,7 @@ use App\Models\Thing;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
@@ -26,6 +27,8 @@ class ActivityController extends Controller
                 return $this->modeGrouped($user);
             case 'collection-group':
                 return $this->modeActivitiesToSubjects($user);
+            case 'collection-group-ignore-dupes':
+                return $this->modeActivitiesToSubjectsIgnoreDupes($user);
             default:
                 throw new \RuntimeException('Unknown mode ' . $mode);
         }
@@ -57,6 +60,23 @@ class ActivityController extends Controller
                 ->where('subject_type', '=', Thing::class)
                 ->latest('created_at')
                 ->latest('id')
+                ->paginate()
+        );
+    }
+
+    private function modeActivitiesToSubjectsIgnoreDupes(User $user)
+    {
+        return new InMemoryGroupedActivityCollection(
+            Activity::query()
+                ->with(['subject', 'subject.user'])
+                ->fromSub(function (Builder $query) use ($user) {
+                    $query
+                        ->select([DB::raw('DATE(created_at) AS created_at'), 'user_id', 'subject_id', 'subject_type'])
+                        ->where('user_id', '=', $user->id)
+                        ->where('subject_type', '=', Thing::class)
+                        ->distinct()
+                        ->from('activities');
+                }, 'jazz')
                 ->paginate()
         );
     }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Activity;
+use App\Models\Thing;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -25,7 +26,7 @@ class DatabaseSeeder extends Seeder
             $user = User::factory()->create();
         }
 
-        // create some activities for today:
+        // create some random activities for today:
         Activity::factory()->count(2)->create([
             'created_at' => now()->startOfDay(),
             'user_id' => $user->id,
@@ -35,7 +36,17 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->id,
         ]);
 
-        // and some for yesterday:
+        // a random thing that the user generated a lot of activity for:
+        $thing = Thing::factory()->create([
+            'title' => 'Busy Thing',
+        ]);
+        Activity::factory()->count(10)->create([
+            'user_id' => $user->id,
+            'subject_id' => $thing->id,
+            'subject_type' => get_class($thing),
+        ]);
+
+        // and some random activities for yesterday:
         Activity::factory()->count(2)->create([
             'created_at' => now()->subDay()->startOfDay(),
             'user_id' => $user->id,
