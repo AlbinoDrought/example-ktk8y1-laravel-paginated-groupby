@@ -2,11 +2,23 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Class User
+ * @package App\Models
+ * @property int $id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string|null $avatar_path
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -20,6 +32,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar_path',
     ];
 
     /**
