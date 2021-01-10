@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Thing;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ThingFactory extends Factory
@@ -22,7 +23,8 @@ class ThingFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->sentence,
+            'user_id' => User::factory(),
         ];
     }
 }

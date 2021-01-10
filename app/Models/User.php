@@ -17,7 +17,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $name
  * @property string $email
  * @property string $password
- * @property string|null $avatar_path
+ * @property string $avatar_path
  */
 class User extends Authenticatable
 {
