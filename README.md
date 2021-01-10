@@ -15,6 +15,10 @@ php artisan migrate:fresh --seed
 php artisan serve
 ```
 
-Visit http://localhost:8000/api/activities
+Visit:
+
+- http://localhost:8000/api/activities?mode=grouped : grouping by created_at
+- http://localhost:8000/api/activities?mode=collection-group : no SQL group by, grouping inside Laravel
+- 
 
 See [ActivityController.php](./app/Http/Controllers/ActivityController.php)
