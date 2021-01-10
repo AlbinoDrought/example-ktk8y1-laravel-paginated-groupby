@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ActivitySubjectCollection;
 use App\Http\Resources\InMemoryGroupedActivityCollection;
 use App\Models\Activity;
 use App\Models\Thing;
@@ -29,6 +30,8 @@ class ActivityController extends Controller
                 return $this->modeActivitiesToSubjects($user);
             case 'collection-group-ignore-dupes':
                 return $this->modeActivitiesToSubjectsIgnoreDupes($user);
+            case 'ignore-dupes':
+                return $this->modeIgnoreDupes($user);
             default:
                 throw new \RuntimeException('Unknown mode ' . $mode);
         }
@@ -77,6 +80,27 @@ class ActivityController extends Controller
                         ->distinct()
                         ->from('activities');
                 }, 'jazz')
+                ->latest('created_at')
+                ->latest('subject_id')
+                ->paginate()
+        );
+    }
+
+    private function modeIgnoreDupes(User $user)
+    {
+        return new ActivitySubjectCollection(
+            Activity::query()
+                ->with(['subject', 'subject.user'])
+                ->fromSub(function (Builder $query) use ($user) {
+                    $query
+                        ->select([DB::raw('DATE(created_at) AS created_at'), 'user_id', 'subject_id', 'subject_type'])
+                        ->where('user_id', '=', $user->id)
+                        ->where('subject_type', '=', Thing::class)
+                        ->distinct()
+                        ->from('activities');
+                }, 'jazz')
+                ->latest('created_at')
+                ->latest('subject_id')
                 ->paginate()
         );
     }

@@ -20,5 +20,6 @@ Visit:
 - http://localhost:8000/api/activities?mode=grouped : grouping by created_at
 - http://localhost:8000/api/activities?mode=collection-group : no SQL group by, grouping inside Laravel
 - http://localhost:8000/api/activities?mode=collection-group-ignore-dupes : SQL DISTINCT, at most one record per thing per day
+- http://localhost:8000/api/activities?mode=ignore-dupes : SQL DISTINCT, at most one record per thing per day, ungrouped by API
 
 See [ActivityController.php](./app/Http/Controllers/ActivityController.php)
